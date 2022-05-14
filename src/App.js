@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import './assets/scss/app.scss';
+import Searchbar from './components/Searchbar';
+import Header from './layouts/Header';
+import Pokedex from './layouts/Pokedex';
+import {PokemonProvider} from './context/PokemonContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header />
+      <div className="container">
+        <PokemonProvider>
+          <Searchbar />
+          <Pokedex />
+        </PokemonProvider>
+      </div>
     </div>
   );
 }

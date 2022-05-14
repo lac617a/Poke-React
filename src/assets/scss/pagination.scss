@@ -1,0 +1,45 @@
+@import './mixins';
+@import './colors.scss';
+
+.pagination {
+  @include flexbox($align:center, $justify: space-between);
+  margin: 0 2rem 2rem;
+  h1 {
+    @include font(500, 54px, 81px);
+    color: transparent;
+    background: rgb(244,67,54);
+    background: linear-gradient(137deg, rgba(244,67,54,1) 0%, rgba(0,144,255,1) 100%);
+    background-clip: text;
+  }
+  &-group {
+    @include flexbox($align:center, $gap: 1.5rem);
+    p {
+      @include font(500, 16px, 20px);
+    }
+  }
+  &-btn {
+    background-color: transparent;
+    border-radius: 50%;
+    padding: 10px 13px;
+    transition: 300ms;
+    &:hover { box-shadow: 0 0 10px -1px rgba(0, 0, 0, .3); }
+  }
+  &-img {
+    width: 40px;
+    object-fit: contain;
+    transform: rotateZ(-90deg);
+  }
+  &-img.right { transform: rotateZ(90deg); }
+}
+
+@media screen and (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .pagination {
+    justify-content: center;
+  }
+}

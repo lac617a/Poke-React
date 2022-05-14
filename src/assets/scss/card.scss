@@ -1,0 +1,97 @@
+@import './mixins';
+@import './colors.scss';
+
+$colors: (
+  ice:     #2ecef3,
+  bug:     #00c251,
+  dark:    #161616,
+  fire:    #fd726d,
+  rock:    #947e6e,
+  grass:   #00c2a7,
+  water:   #2aacf2,
+  fairy:   #d52772,
+  steel:   #808990,
+  ghost:   #512b4c,
+  poison:  #81538b,
+  ground:  #ba716d,
+  normal:  #363636,
+  dragon:  #bdd349,
+  flying:  #0088b0,
+  psychic: #ffcb8a,
+  electric:#fecc5b,
+  fighting:#de7330,
+);
+
+@each $name, $color in $colors {
+  .#{$name} {
+    background-color: #{$color} !important;
+  }
+  @each $value, $colores in $colors {
+    .#{$name}-#{$value} {
+      background-image: linear-gradient( -45deg, #{$colores} 0%, #{$colores} 50%, #{$color} 0%, #{$color} 50%);
+    }
+  }
+}
+
+.card {
+  @include flexbox($direction:column, $gap: 1rem);
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: $color-grey;
+  max-width: 150px;
+  width: 100%;
+  max-height: 150px;
+  box-shadow: 3px 3px 10px -1px rgba(0, 0, 0, .3);
+  perspective: 400px;
+  overflow: hidden;
+  &-header {
+    width: 100%;
+    @include flexbox($justify:space-between);
+    color: $color-white;
+    h2, p {@include font(600, 14px,22px); text-transform: capitalize;}
+  }
+  &-content {
+    position: relative;
+    @include flexbox($align:center, $justify:space-between);
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 0 0;
+      @include screen();
+      z-index: 1;
+    }
+    .img-float {
+      position: absolute;
+      right: -2rem;
+      bottom: -2rem;
+      filter: invert(1) opacity(0.5);
+    }
+  }
+  &-nav {
+    position: relative;
+    @include flexbox($direction:column, $gap: 5px);
+  }
+  &-item {
+    border-radius: 10px;
+    padding: 0 5px;
+    text-align: center;
+    min-width: 50px;
+    color: $color-white;
+    box-shadow: inset 0 0 10px -1px rgba(0, 0, 0, .3);
+    @include font(400, 10px, 16px);
+  }
+  &-figure {
+    perspective: 500px;
+    margin: 0;
+    max-width: 80px;
+    height: 80px;
+  }
+  &__img {
+    position: relative;
+    transform-style: preserve-3d;
+    object-fit: cover;
+    @include screen();
+    filter: drop-shadow(0 0 10px rgba(0,0,0,.5));
+    transition: 300ms;
+  }
+}
