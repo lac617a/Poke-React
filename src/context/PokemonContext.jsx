@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 
 import getPokemon from '../api/getPokemon';
-import searchPokemon from '../api/searchPokemon';
 import getPokemonData from '../api/getPokemonData';
 
 const PokemonContext = createContext(null);
@@ -67,12 +66,14 @@ export const PokemonProvider = (props) => {
   
   useEffect(() => {
     showPokemon();
+    // eslint-disable-next-line
   }, [state.page]);
 
   useEffect(() => {
     if (state.search.length > 0){
       seekerPokemon();
     } else { showPokemon(); }
+    // eslint-disable-next-line
   }, [state.search]);
 
   const value = useMemo(() => {
