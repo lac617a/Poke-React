@@ -38,15 +38,16 @@ const reducer = (state, action) => {
 
 export const PokemonProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, stateGlobal);
+  const AMOUNTPOKEMON = 30;
 
   const showPokemon = async () => {
     try {
       dispatch({type: 'setLoading', payload: true});
-      const data = await getPokemon(30, 30 * state.page);
+      const data = await getPokemon(AMOUNTPOKEMON, AMOUNTPOKEMON * state.page);
       const promise = data.results.map(async poke => await getPokemonData(poke.url));
       const results = await Promise.all(promise);
       dispatch({type: 'setPokemon', payload: results});
-      dispatch({type: 'setTotal', payload: Math.ceil(data.count / 30)});
+      dispatch({type: 'setTotal', payload: Math.ceil(data.count / AMOUNTPOKEMON)});
       dispatch({type: 'setLoading', payload: false});
     } catch (error) { console.error(error); }
   };
@@ -54,27 +55,25 @@ export const PokemonProvider = (props) => {
   const seekerPokemon = async () => {
     try {
       dispatch({type: 'setLoading', payload: true});
-      const data = await getPokemon(30, 30 * state.page);
-      const promise = data.results.map(async poke => await getPokemonData(poke.url));
+      const data = await getPokemon(1126);
+      const searchPokemon = await data.results.filter(item => item.name.startsWith(state.search));
+      const promise = searchPokemon.map(async element => await getPokemonData(element.url));
       let results = await Promise.all(promise);
-      results = results.filter(item => item.name.startsWith(state.search));
-      dispatch({type: 'setPokemon', payload: results});
-      dispatch({type: 'setTotal', payload: Math.ceil(data.count / 30)});
+      // result search transform
+      let transforResult = results.slice(AMOUNTPOKEMON * state.page, Math.ceil(results.length * (state.page + 1) / 2.8));
+      dispatch({type: 'setPokemon', payload: transforResult});
+      dispatch({type: 'setTotal', payload: Math.ceil(results.length / AMOUNTPOKEMON)});
       dispatch({type: 'setLoading', payload: false});
     } catch (error) {console.error(error)}
   };
-  
-  useEffect(() => {
-    showPokemon();
-    // eslint-disable-next-line
-  }, [state.page]);
 
   useEffect(() => {
-    if (state.search.length > 0){
+    if (state.search?.length > 0){
       seekerPokemon();
     } else { showPokemon(); }
+    return () => null;
     // eslint-disable-next-line
-  }, [state.search]);
+  }, [state.page, state.search]);
 
   const value = useMemo(() => {
     return { state, dispatch }

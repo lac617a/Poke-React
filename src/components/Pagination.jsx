@@ -12,8 +12,11 @@ export default function Pagination() {
   }, [state.page, dispatch]);
 
   const nextPage = useCallback(() => {
-    const next = Math.min(state.page + 1, state.total);
-    dispatch({type: 'setPage', payload: next});
+    const page = state.page + 1;
+    if (state.total >= page + 1) {
+      const next = Math.min(page, state.total);
+      dispatch({type: 'setPage', payload: next});
+    }
 
   }, [state.page, dispatch, state.total]);
 
